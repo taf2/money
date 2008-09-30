@@ -69,17 +69,37 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal Money.ca_dollar(150), Money.ca_dollar(100) * 1.50
     assert_equal Money.ca_dollar(50), Money.ca_dollar(100) * 0.50
   end
-
+  
+  def test_multiply_with_precision
+    assert_equal '1.01', (Money.new(504, 'USD', 3) * 2).to_s
+  end
+  
   def test_divide
     assert_equal Money.ca_dollar(100), Money.ca_dollar(5500) / 55    
     assert_equal Money.ca_dollar(100), Money.ca_dollar(200) / 2    
   end
+
+  def test_divide_with_other_precision
+    assert_equal Money.new(100, 'USD', 3), Money.new(5500, 'USD', 3) / 55
+    assert_equal Money.new(100, 'USD', 3), Money.new(200, 'USD', 3) / 2
+  end
+  
+  def test_add_with_other_precision
+    assert_equal Money.new(1000, 'USD', 3), Money.new(30, 'USD', 2) + Money.new(700, 'USD', 3)
+  end
+  
+  def test_subtract_with_other_precision
+    assert_equal Money.new(450, 'USD', 3), Money.new(50, 'USD', 2) - Money.new(50, 'USD', 3)
+  end
   
   def test_empty_can_exchange_currency
-    assert_equal Money.ca_dollar(100), Money.empty('USD') + Money.ca_dollar(100)
+    Money.bank = VariableExchangeBank.new
+    Money.bank.add_rate("CAD", "USD", 1)
+    Money.bank.add_rate("USD", "CAD", 1)
+    assert_equal Money.us_dollar(100), Money.empty('USD') + Money.ca_dollar(100)
     assert_equal Money.ca_dollar(100), Money.ca_dollar(100) + Money.empty('USD')
     
-    assert_equal Money.ca_dollar(-100), Money.empty('USD') - Money.ca_dollar(-100)
+    assert_equal Money.us_dollar(-100), Money.empty('USD') - Money.ca_dollar(100)
     assert_equal Money.ca_dollar(-100), Money.ca_dollar(-100) - Money.empty('USD')
   end
   
@@ -88,10 +108,15 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal "390.50", Money.ca_dollar(39050).to_s
   end
   
+  def test_to_s_with_other_precision
+    assert_equal "0.51", Money.new(505, 'USD', 3).to_s
+    assert_equal "0.50", Money.new(504, 'USD', 3).to_s
+    assert_equal "1.00", Money.new(1001, 'USD', 3).to_s
+  end
+  
   def test_substract_from_zero
    assert_equal -12.to_money, Money.empty - (12.to_money)
   end
-  
   
   def test_formatting
 
@@ -110,5 +135,10 @@ class MoneyTest < Test::Unit::TestCase
     
   end
   
+  def test_to_precision
+    assert_equal Money.new(500, 'USD', 3), Money.new(50, 'USD', 2).to_precision(3)
+    assert_equal Money.new(56, 'USD', 2), Money.new(555, 'USD', 3).to_precision(2)
+    assert_equal Money.new(56, 'USD', 2), Money.new(56, 'USD', 2).to_precision(2)
+  end
   
 end

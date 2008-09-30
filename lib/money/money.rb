@@ -21,7 +21,7 @@
 class Money
   include Comparable
 
-  attr_reader :cents, :currency
+  attr_reader :cents, :currency, :precision
 
   class MoneyError < StandardError# :nodoc:
   end
@@ -48,8 +48,8 @@ class Money
   # 
   # Alternativly you can use the convinience methods like 
   # Money.ca_dollar and Money.us_dollar 
-  def initialize(cents, currency = default_currency)
-    @cents, @currency = cents.round, currency
+  def initialize(cents, currency = default_currency, precision = 2)
+    @cents, @currency, @precision = cents.round, currency, precision
   end
 
   # Do two money objects equal? Only works if both objects are of the same currency
@@ -66,30 +66,17 @@ class Money
   end
 
   def +(other_money)
-    return other_money.dup if cents.zero? 
-    return dup if other_money.cents.zero?
-
-    if currency == other_money.currency
-      Money.new(cents + other_money.cents, other_money.currency)
-    else
-      Money.new(cents + other_money.exchange_to(currency).cents,currency)
-    end   
+    other_money = other_money.exchange_to(currency) unless other_money.currency == currency
+    
+    new_precision = [precision, other_money.precision].max
+    Money.new(to_precision(new_precision).cents + other_money.to_precision(new_precision).cents, currency, new_precision)
   end
 
   def -(other_money)
-
-    if currency == other_money.currency
-      Money.new(cents - other_money.cents, other_money.currency)
-    else
-      
-      return other_money.dup if self.cents.zero?
-
-      return self.dup if other_money.cents.zero?
-      
-      
-      Money.new(cents - other_money.exchange_to(currency).cents, currency)
-      
-    end   
+    other_money = other_money.exchange_to(currency) unless other_money.currency == currency
+    
+    new_precision = [precision, other_money.precision].max
+    Money.new(to_precision(new_precision).cents - other_money.to_precision(new_precision).cents, currency, new_precision)
   end
 
   # get the cents value of the object
@@ -99,12 +86,12 @@ class Money
 
   # multiply money by fixnum
   def *(fixnum)
-    Money.new(cents * fixnum, currency)    
+    Money.new(cents * fixnum, currency, precision)
   end
 
   # divide money by fixnum
   def /(fixnum)
-    Money.new(cents / fixnum, currency)    
+    Money.new(cents / fixnum, currency, precision)
   end
   
   # Test if the money amount is zero
@@ -140,9 +127,9 @@ class Money
     rules = rules.flatten
 
     if rules.include?(:no_cents)
-      formatted = sprintf("$%d", cents.to_f / 100  )          
+      formatted = sprintf("$%d", cents.to_f / (10 ** precision)  )
     else
-      formatted = sprintf("$%.2f", cents.to_f / 100  )      
+      formatted = sprintf("$%.2f", cents.to_f / (10 ** precision)  )
     end
 
     if rules.include?(:with_currency)
@@ -156,13 +143,19 @@ class Money
 
   # Money.ca_dollar(100).to_s => "1.00"
   def to_s
-    sprintf("%.2f", cents.to_f / 100  )
+    sprintf("%.2f", cents.to_f / 10 ** precision  )
   end
 
   # Recieve the amount of this money object in another currency   
   def exchange_to(other_currency)
     self.class.bank.reduce(self, other_currency)
-  end  
+  end
+  
+  def to_precision(new_precision)
+    difference = new_precision - precision
+    new_cents = difference > 0 ? cents * 10**difference : (cents.to_f / 10**difference.abs).round
+    Money.new(new_cents, 'USD', new_precision)
+  end
 
   # Create a new money object with value 0
   def self.empty(currency = default_currency)
