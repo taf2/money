@@ -126,11 +126,7 @@ class Money
 
     rules = rules.flatten
 
-    if rules.include?(:no_cents)
-      formatted = sprintf("$%d", cents.to_f / (10 ** precision)  )
-    else
-      formatted = sprintf("$%.2f", cents.to_f / (10 ** precision)  )
-    end
+    formatted = "$" + to_s(rules.include?(:no_cents) ? 0 : 2)
 
     if rules.include?(:with_currency)
       formatted << " "
@@ -142,8 +138,12 @@ class Money
   end
 
   # Money.ca_dollar(100).to_s => "1.00"
-  def to_s
-    sprintf("%.2f", cents.to_f / 10 ** precision  )
+  def to_s(show_precision = precision)
+    if show_precision > 0
+      sprintf("%.#{show_precision}f", cents.to_f / 10 ** precision  )
+    else
+      sprintf("%d", cents.to_f / 10 ** (precision - show_precision)  )
+    end
   end
 
   # Recieve the amount of this money object in another currency   

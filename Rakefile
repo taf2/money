@@ -6,7 +6,7 @@ require 'rake/gempackagetask'
 require 'rake/contrib/rubyforgepublisher'
 require 'fileutils'
 
-PKG_VERSION = "1.6.0"
+PKG_VERSION = "1.7.2"
 PKG_NAME = "money"
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 

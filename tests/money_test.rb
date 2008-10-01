@@ -71,7 +71,7 @@ class MoneyTest < Test::Unit::TestCase
   end
   
   def test_multiply_with_precision
-    assert_equal '1.01', (Money.new(504, 'USD', 3) * 2).to_s
+    assert_equal Money.new(1008, 'USD', 3), (Money.new(504, 'USD', 3) * 2)
   end
   
   def test_divide
@@ -109,9 +109,12 @@ class MoneyTest < Test::Unit::TestCase
   end
   
   def test_to_s_with_other_precision
-    assert_equal "0.51", Money.new(505, 'USD', 3).to_s
-    assert_equal "0.50", Money.new(504, 'USD', 3).to_s
-    assert_equal "1.00", Money.new(1001, 'USD', 3).to_s
+    assert_equal "0.505", Money.new(505, 'USD', 3).to_s
+    assert_equal "4", Money.new(4, 'USD', -3).to_s
+    assert_equal "4000", Money.new(4, 'USD', -3).to_s(0)
+    assert_equal "0.51", Money.new(505, 'USD', 3).to_s(2)
+    assert_equal "0.50", Money.new(504, 'USD', 3).to_s(2)
+    assert_equal "1.00", Money.new(1001, 'USD', 3).to_s(2)
   end
   
   def test_substract_from_zero
