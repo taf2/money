@@ -6,8 +6,9 @@ require 'rake/gempackagetask'
 require 'rake/contrib/rubyforgepublisher'
 require 'fileutils'
 
-PKG_VERSION = "1.7.2"
-PKG_NAME = "money"
+spec = eval(File.read("#{File.dirname(__FILE__)}/money.gemspec"))
+PKG_NAME = spec.name
+PKG_VERSION = spec.version
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 
@@ -93,24 +94,6 @@ task :publish => [:rdoc, :package] do
   `rm -rf doc/`
 end
 
-
-spec = Gem::Specification.new do |s|
-  s.name = PKG_NAME
-  s.version = PKG_VERSION
-  s.summary = "Class aiding in the handling of Money."
-  s.description = ['Class aiding in the handling of Money and Currencies.',
-                   'It supports easy pluggable bank objects for customized exchange strategies.',
-                   'Can be used as composite in ActiveRecord tables.'].join('\n')
-  s.has_rdoc = true
-
-  s.files = %w(README MIT-LICENSE) + Dir['lib/**/*']  
-
-  s.require_path = 'lib'
-  s.autorequire  = 'money'
-  s.author = "Tobias Luetke"
-  s.email = "tobi@leetsoft.com"
-  s.homepage = "http://leetsoft.com/rails/money"  
-end
 
 Rake::GemPackageTask.new(spec) do |p|
   p.gem_spec = spec
