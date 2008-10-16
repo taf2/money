@@ -86,11 +86,6 @@ class Money
     Money.new(-cents, currency, precision)
   end
 
-  # get the cents value of the object
-  def cents
-    @cents.to_i
-  end
-
   # multiply money by fixnum
   def *(fixnum)
     Money.new(cents * fixnum, currency, precision)
@@ -147,10 +142,14 @@ class Money
   # Money.ca_dollar(100).to_s => "1.00"
   def to_s(show_precision = precision)
     if show_precision > 0
-      sprintf("%.#{show_precision}f", cents.to_f / 10 ** precision  )
+      sprintf("%.#{show_precision}f", dollars  )
     else
       sprintf("%d", cents.to_f / 10 ** (precision - show_precision)  )
     end
+  end
+  
+  def dollars
+    cents.to_f / 10 ** precision
   end
 
   # Recieve the amount of this money object in another currency   

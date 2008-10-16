@@ -156,4 +156,9 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal Money.new(56, 'USD', 2), Money.new(56, 'USD', 2).to_precision(2)
   end
   
+  def test_dollars
+    assert_equal 5.75, 5.75.to_money.dollars
+    assert_equal 5.755, Money.new(5755, 'USD', 3).dollars
+  end
+  
 end
