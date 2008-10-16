@@ -82,6 +82,10 @@ class Money
     Money.new(to_precision(new_precision).cents - other_money.to_precision(new_precision).cents, currency, new_precision)
   end
 
+  def -@
+    Money.new(-cents, currency, precision)
+  end
+
   # get the cents value of the object
   def cents
     @cents.to_i

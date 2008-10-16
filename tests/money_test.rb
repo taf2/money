@@ -92,6 +92,11 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal Money.new(450, 'USD', 3), Money.new(50, 'USD', 2) - Money.new(50, 'USD', 3)
   end
   
+  def test_negative
+    assert_equal Money.new(-43, 'CAD', 2), -Money.new(43, 'CAD', 2)
+    assert_equal Money.new(-2979, 'CAD', 3), -Money.new(2979, 'CAD', 3)
+  end
+  
   def test_empty_can_exchange_currency
     Money.bank = VariableExchangeBank.new
     Money.bank.add_rate("CAD", "USD", 1)
