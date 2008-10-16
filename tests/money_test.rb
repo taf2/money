@@ -122,8 +122,6 @@ class MoneyTest < Test::Unit::TestCase
   end
   
   def test_formatting
-
-    assert_equal "free", Money.ca_dollar(0).format
     assert_equal "$1.00", @can1.format 
     assert_equal "$1.00 CAD", @can1.format(:with_currency)
 
@@ -135,7 +133,16 @@ class MoneyTest < Test::Unit::TestCase
     assert_equal "$390", Money.ca_dollar(39000).format(:no_cents)
 
     assert_equal "$5.70 <span class=\"currency\">CAD</span>", Money.ca_dollar(570).format([:html, :with_currency])
-    
+  end
+  
+  def test_format_zero
+    assert_equal '$0.00', Money.empty.format
+  end
+  
+  def test_custom_format_zero
+    Money.zero = 'zilch'
+    assert_equal 'zilch', Money.empty.format
+    Money.zero = nil
   end
   
   def test_to_precision

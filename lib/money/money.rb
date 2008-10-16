@@ -42,6 +42,9 @@ class Money
 
   @@default_currency = "USD"
   cattr_accessor :default_currency
+  
+  # String to use when formating zero values
+  cattr_accessor :zero
 
   # Creates a new money object. 
   #  Money.new(100) 
@@ -122,8 +125,8 @@ class Money
   #
   #  Money.ca_dollar(570).format(:html, :with_currency) =>  "$5.70 <span class=\"currency\">CAD</span>"
   def format(*rules)
-    return "free" if cents == 0
-
+    return self.class.zero if zero? && self.class.zero
+    
     rules = rules.flatten
 
     formatted = "$" + to_s(rules.include?(:no_cents) ? 0 : 2)
