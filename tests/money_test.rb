@@ -153,7 +153,7 @@ class MoneyTest < Test::Unit::TestCase
   def test_to_precision
     assert_equal Money.new(500, 'USD', 3), Money.new(50, 'USD', 2).to_precision(3)
     assert_equal Money.new(56, 'USD', 2), Money.new(555, 'USD', 3).to_precision(2)
-    assert_equal Money.new(56, 'USD', 2), Money.new(56, 'USD', 2).to_precision(2)
+    assert_equal Money.new(56, 'CAD', 2), Money.new(56, 'CAD', 2).to_precision(2)
   end
   
   def test_dollars

@@ -160,7 +160,7 @@ class Money
   def to_precision(new_precision)
     difference = new_precision - precision
     new_cents = difference > 0 ? cents * 10**difference : (cents.to_f / 10**difference.abs).round
-    Money.new(new_cents, 'USD', new_precision)
+    Money.new(new_cents, currency, new_precision)
   end
 
   # Create a new money object with value 0
