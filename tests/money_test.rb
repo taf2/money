@@ -157,8 +157,8 @@ class MoneyTest < Test::Unit::TestCase
   end
   
   def test_dollars
-    assert_equal 5.75, 5.75.to_money.dollars
-    assert_equal 5.755, Money.new(5755, 'USD', 3).dollars
+    assert_equal 5.75, 5.75.to_money.to_f
+    assert_equal 5.755, Money.new(5755, 'USD', 3).to_f
   end
   
 end
