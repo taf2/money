@@ -27,6 +27,10 @@ class CoreExtensionsTest < Test::Unit::TestCase
     assert_equal Money.new(410), "4.10".to_money
   end
   
+  def test_string_conversion_with_commas
+    assert_equal Money.new(123456), '$1,234.56'.to_money
+  end
+  
   def test_string_with_other_precision
     assert_equal Money.new(500, 'USD', 2), '5'.to_money
     assert_equal Money.new(500, 'USD', 2), '5.0'.to_money

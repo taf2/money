@@ -43,8 +43,8 @@ class String
     end
     
     # Get the cents amount
-    matches = scan /(\-?\d+(\.(\d+))?)/
-    cents = matches[0] ? (matches[0][0].to_f * 10**precision) : 0
+    matches = scan /(\-?[\d,]+(\.(\d+))?)/
+    cents = matches[0] ? (matches[0][0].gsub(',', '').to_f * 10**precision) : 0
     
     Money.new(cents, currency, precision)
   end
