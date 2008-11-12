@@ -154,7 +154,7 @@ class Money
 
   # Recieve the amount of this money object in another currency   
   def exchange_to(other_currency)
-    self.class.bank.reduce(self, other_currency)
+    self.class.bank.exchange(self, other_currency)
   end
   
   def to_precision(new_precision)
