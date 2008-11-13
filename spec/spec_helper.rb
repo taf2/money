@@ -1,4 +1,4 @@
-# This file is copied to ~/spec when you run 'ruby script/generate rspec'
-# from the project root directory.
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+
 require 'spec'
-require 'lib/money'
+require 'money'
