@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rake'
-require 'rake/testtask'
+require 'spec/rake/spectask'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rake/contrib/rubyforgepublisher'
@@ -30,22 +30,16 @@ module FileUtils
 end
 
 PKG_FILES = FileList[
-    "lib/**/*", "tests/*", "[A-Z]*", "rakefile"
+    "lib/**/*", "spec/*", "[A-Z]*", "rakefile"
 ].exclude(/\bCVS\b|~$/)
 
 desc "Default Task"
-task :default => [ :test ]
+task :default => [ :spec ]
 
 desc "Delete tar.gz / zip / rdoc"
 task :cleanup => [ :rm_packages, :clobber_rdoc ]
 
-# Run the unit tests
-
-Rake::TestTask.new("test") { |t|
-  t.libs << "test"
-  t.pattern = 'tests/*_test.rb'
-  t.verbose = false
-}
+Spec::Rake::SpecTask.new
 
 task :install => [:package] do
   `gem install pkg/#{PKG_FILE_NAME}.gem`
