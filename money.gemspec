@@ -8,13 +8,10 @@ Gem::Specification.new do |s|
   s.files = %w(
     README
     MIT-LICENSE
-    lib/bank/no_exchange_bank.rb
-    lib/bank/variable_exchange_bank.rb
-    lib/money
+    lib/money/bank/no_exchange_bank.rb
+    lib/money/bank/variable_exchange_bank.rb
     lib/money/core_extensions.rb
-    lib/money/money.rb
     lib/money.rb
-    lib/support
     lib/support/cattr_accessor.rb
   )
 
