@@ -13,7 +13,7 @@ module ActiveRecord #:nodoc:
           options = {:cents => "#{name}_in_cents".to_sym}.merge(options)
           mapping = [[options[:cents].to_s, 'cents']]
           mapping << [options[:currency].to_s, 'currency'] if options[:currency]
-          composed_of name, {:class_name => 'Money', :mapping => mapping do |m|
+          composed_of name, :class_name => 'Money', :mapping => mapping, :allow_nil => true do |m|
             m.to_money
           end
         end
