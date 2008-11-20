@@ -9,17 +9,17 @@ module ActiveRecord #:nodoc:
 
       module ClassMethods
         
-        def default_currency
-          'USD'
-        end
-        
         def money(name, options = {})
-          options = {:cents => "#{name}_in_cents".to_sym, :currency => default_currency}.merge(options)
+          options = {:cents => "#{name}_in_cents".to_sym}.merge(options)
           mapping = [[options[:cents].to_s, 'cents']]
           mapping << [options[:currency].to_s, 'currency'] if options[:currency]
-          
-          composed_of name, :class_name => 'Money', :allow_nil => true, :mapping => mapping,
-            :converter => lambda {|m| m.to_money }
+          args = [name, {:class_name => 'Money', :mapping => mapping, :converter => lambda{|m| m.to_money}}]
+          begin
+            composed_of(*args)
+          rescue
+            converter_block = args.last.delete(:converter)
+            composed_of(*args, &converter_block)
+          end
         end
       end
     end
