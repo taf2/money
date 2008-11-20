@@ -13,13 +13,8 @@ module ActiveRecord #:nodoc:
           options = {:cents => "#{name}_in_cents".to_sym}.merge(options)
           mapping = [[options[:cents].to_s, 'cents']]
           mapping << [options[:currency].to_s, 'currency'] if options[:currency]
-          args = [name, {:class_name => 'Money', :mapping => mapping, :converter => lambda{|m| m.to_money}}]
-          begin
-            composed_of(*args)
-          rescue
-            converter_block = args.last.delete(:converter)
-            composed_of(*args, &converter_block)
-          end
+          composed_of name, :class_name => 'Money', :mapping => mapping,
+            :converter => lambda{|m| m.to_money}
         end
       end
     end
