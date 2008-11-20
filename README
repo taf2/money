@@ -41,6 +41,32 @@ object in your models. The following example requires a cents and a currency fie
       validates_presence_of :sku, :currency
       validates_uniqueness_of :sku        
   end
+
+== Rails
+
+There is a rails extension that makes it easier to store money values in the database.
+
+  class Product < ActiveRecord::Base
+    money :price
+  end
+
+This assumes that there is a price_in_cents (integer) column in the database, which can
+be changed by passing the :cents option.  You can also specify the :currency option to
+save the currency to a field in the database.
+
+  class Room < ActiveRecord::Base
+    money :rate, :cents => :rate_in_cents, :currency => :rate_currency
+    money :discount, :cents => :discount_in_cents
+  end
+
+You can pass a String, Fixnum, or Float as a parameter to the setter, and it will call 
+#to_money to convert it to a Money object.  This makes it convenient for using money
+fields in forms.
+
+  r = Room.new :rate => "100.00"
+  r.rate  # returns <Money:0x249ef9c @currency="USD", @cents=10000>
+
+To use the Rails functionality, install money as a plugin, or require 'money/rails'
   
 == Class configuration
 
