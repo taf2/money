@@ -18,9 +18,15 @@ class MoneyExample < ActiveRecord::Base
 end
 
 describe Money, "using the money declaration in an ActiveRecord model" do
-  it "still allows dynamic finders to work the same as composed_of" do
+  it "should allow dynamic finders to work the same as composed_of" do
     record = MoneyExample.create!(:debit_amount => 100.to_money)
     MoneyExample.find_by_debit_amount(0.to_money).should be_nil
     MoneyExample.find_by_debit_amount(100.to_money).should == record
+  end
+  
+  describe "setter method" do
+    it "should treat blank values as nil" do
+      MoneyExample.new(:debit_amount => '').debit_amount.should be_nil
+    end
   end
 end

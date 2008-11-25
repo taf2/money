@@ -15,6 +15,11 @@ module ActiveRecord #:nodoc:
           mapping << [options[:currency].to_s, 'currency'] if options[:currency]
           composed_of name, :class_name => 'Money', :mapping => mapping, :allow_nil => true,
             :converter => lambda{|m| m.to_money}
+            
+          define_method "#{name}_with_blank=" do |value|
+            send("#{name}_without_blank=", value) unless value.blank?
+          end
+          alias_method_chain "#{name}=", :blank
         end
       end
     end
