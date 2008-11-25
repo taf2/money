@@ -25,6 +25,18 @@ describe Money, "using the money declaration in an ActiveRecord model" do
   end
   
   describe "setter method" do
+    it "should pass on money values" do
+      MoneyExample.new(:debit_amount => 1.to_money).debit_amount.should == 1.to_money
+    end
+    
+    it "should convert string values to money objects" do
+      MoneyExample.new(:debit_amount => '2').debit_amount.should == 2.to_money
+    end
+
+    it "should convert numeric values to money objects" do
+      MoneyExample.new(:debit_amount => 3).debit_amount.should == 3.to_money
+    end
+
     it "should treat blank values as nil" do
       MoneyExample.new(:debit_amount => '').debit_amount.should be_nil
     end
