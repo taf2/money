@@ -10,14 +10,20 @@ module ActiveRecord #:nodoc:
       module ClassMethods
         
         def money(name, options = {})
-          options = {:cents => "#{name}_in_cents".to_sym}.merge(options)
+          attr_name = "#{name}_in_cents".to_sym
+          options = {:cents => attr_name}.merge(options)
           mapping = [[options[:cents].to_s, 'cents']]
           mapping << [options[:currency].to_s, 'currency'] if options[:currency]
           composed_of name, :class_name => 'Money', :mapping => mapping, :allow_nil => true,
             :converter => lambda{|m| m.to_money}
             
           define_method "#{name}_with_blank=" do |value|
-            send("#{name}_without_blank=", value) unless value.blank?
+            if value.blank?
+              write_attribute(attr_name, nil)
+              instance_variable_set "@#{name}", nil
+            else
+              send("#{name}_without_blank=", value)
+            end
           end
           alias_method_chain "#{name}=", :blank
         end
