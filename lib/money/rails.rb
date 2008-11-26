@@ -18,12 +18,7 @@ module ActiveRecord #:nodoc:
             :converter => lambda{|m| m.to_money}
             
           define_method "#{name}_with_blank=" do |value|
-            if value.blank?
-              write_attribute(attr_name, nil)
-              instance_variable_set "@#{name}", nil
-            else
-              send("#{name}_without_blank=", value)
-            end
+            send "#{name}_without_blank=", value.blank? ? nil : value
           end
           alias_method_chain "#{name}=", :blank
         end
