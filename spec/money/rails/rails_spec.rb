@@ -17,6 +17,13 @@ class MoneyExample < ActiveRecord::Base
   money :debit_amount
 end
 
+class OtherMoneyExample < ActiveRecord::Base
+  set_table_name "money_examples"
+  
+  money :amount, :cents => "debit_amount_in_cents"
+  money :precise_amount, :cents => "credit_amount_in_cents", :precision => 3
+end
+
 describe Money, "using the money declaration in an ActiveRecord model" do
   it "should allow dynamic finders to work the same as composed_of" do
     record = MoneyExample.create!(:debit_amount => 100.to_money)
@@ -45,6 +52,22 @@ describe Money, "using the money declaration in an ActiveRecord model" do
       me = MoneyExample.new(:debit_amount => 500.to_money)
       me.update_attribute :debit_amount, ''
       me.debit_amount.should be_nil
+    end
+  end
+  
+  describe "declaring a money field" do
+    it "should allow the field to be declared with a different cents field" do
+      ome = OtherMoneyExample.create!(:amount => 5.to_money)
+      ome.amount.should == 5.to_money
+      ome.reload.amount.should == 5.to_money
+      ome.debit_amount_in_cents.should == 5.to_money.cents
+    end
+    
+    it "should allow a default precision to be passed in" do
+      ome = OtherMoneyExample.create!(:precise_amount => "0.535")
+      ome.precise_amount.should == Money.new(535, 'USD', 3)
+      ome.reload.precise_amount.should == Money.new(535, 'USD', 3)
+      ome.credit_amount_in_cents.should == Money.new(535, 'USD', 3).cents
     end
   end
 end
