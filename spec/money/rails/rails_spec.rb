@@ -3,13 +3,12 @@ require 'rubygems'
 require 'active_record'
 require 'money/rails'
 
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => File.expand_path(File.dirname(__FILE__) + '/test.db' ))
-ActiveRecord::Schema.suppress_messages do
-  ActiveRecord::Schema.define do
-    create_table :money_examples, :force => true do |t|
-      t.integer :credit_amount_in_cents
-      t.integer :debit_amount_in_cents
-    end
+ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+ActiveRecord::Migration.verbose = false
+ActiveRecord::Schema.define do
+  create_table :money_examples, :force => true do |t|
+    t.integer :credit_amount_in_cents
+    t.integer :debit_amount_in_cents
   end
 end
 
