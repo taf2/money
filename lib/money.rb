@@ -207,7 +207,7 @@ class Money
   end  
 
   # Conversation to self
-  def to_money
-    self
+  def to_money(precision = nil)
+    precision ? to_precision(precision) : self
   end  
 end

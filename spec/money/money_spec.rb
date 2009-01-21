@@ -174,6 +174,16 @@ describe Money do
     end
   end
   
+  describe "to_money" do
+    it "should return an equal money" do
+      Money.new(50).to_money.should == Money.new(50)
+    end
+    
+    it "should convert to the given precision" do
+      Money.new(50, 'USD', 2).to_money(3).should == Money.new(500, 'USD', 3)
+    end
+  end
+  
   describe "to_s" do
     it "should format the cents" do
       Money.ca_dollar(100).to_s.should == "1.00"
