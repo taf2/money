@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'money'
-  s.version = '1.7.3'
+  s.version = '1.7.4'
   s.summary = "Class aiding in the handling of Money."
   s.description = 'Class aiding in the handling of Money and Currencies. It supports easy pluggable bank objects for customized exchange strategies. Can be used as composite in ActiveRecord tables.'
   s.has_rdoc = true
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   )
 
   s.require_path = 'lib'
-  s.author = "Tobias Luetke"
-  s.email = "tobi@leetsoft.com"
-  s.homepage = "http://leetsoft.com/rails/money"  
+  s.authors = ["Brandon Keepers", "Tobias Luetke"]
+  s.email = "brandon@opensoul.org"
+  s.homepage = "http://github.com/collectiveidea/money"
 end
