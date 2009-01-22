@@ -63,10 +63,18 @@ describe Money, "using the money declaration in an ActiveRecord model" do
     end
     
     it "should allow a default precision to be passed in" do
-      ome = OtherMoneyExample.create!(:precise_amount => "0.535")
-      ome.precise_amount.should == Money.new(535, 'USD', 3)
+      expected = Money.new(535, 'USD', 3)
+      ome = OtherMoneyExample.new(:precise_amount => "0.535")
+      ome.precise_amount.should == expected
+      ome.save!
       ome.reload.precise_amount.should == Money.new(535, 'USD', 3)
       ome.credit_amount_in_cents.should == Money.new(535, 'USD', 3).cents
     end
+
+    it "should use the defined precision when building a new model and setting the raw cents" do
+      ome = OtherMoneyExample.new(:credit_amount_in_cents => 535)
+      ome.precise_amount.should == Money.new(535, 'USD', 3)
+    end
+
   end
 end
