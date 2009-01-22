@@ -54,8 +54,12 @@ describe String do
       "$1".to_money.should == Money.new(100)
       "1".to_money.should == Money.new(100)
     end
+
+    it "should work with only decimals, and no leading digits" do
+      ".37".to_money.should == Money.new(37)
+    end
     
-    it "should perserve cents" do
+    it "should preserve cents" do
       "$1.37".to_money.should == Money.new(137)
     end
     

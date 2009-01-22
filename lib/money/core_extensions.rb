@@ -26,6 +26,7 @@ class String
   #
   #   '100'.to_money    #=> #<Money @cents=10000>
   #   '100.37'.to_money #=> #<Money @cents=10037>
+  #   '.37'.to_money    #=> #<Money @cents=37>
   #
   # It takes an optional precision argument which defaults to 2 or the number of
   # digits after the decimal point if it's more than 2.
@@ -41,11 +42,11 @@ class String
       precision = scan(/\.(\d+)/).to_s.length
       precision = 2 if precision < 2
     end
-    
+
     # Get the cents amount
-    matches = scan /(\-?[\d,]+(\.(\d+))?)/
+    str = self =~ /^\./ ? "0#{self}" : self
+    matches = str.scan /(\-?[\d,]+(\.(\d+))?)/
     cents = matches[0] ? (matches[0][0].gsub(',', '').to_f * 10**precision) : 0
-    
     Money.new(cents, currency, precision)
   end
 end
