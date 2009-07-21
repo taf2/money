@@ -3,26 +3,6 @@ require 'money/bank/no_exchange_bank'
 require 'money/bank/variable_exchange_bank'
 require 'money/core_extensions'
 
-# === Usage with ActiveRecord
-# 
-# Use the compose_of helper to let active record deal with embedding the money
-# object in your models. The following example requires a cents and a currency field.
-# 
-#   class ProductUnit < ActiveRecord::Base
-#     belongs_to :product
-#     composed_of :price, :class_name => "Money", :mapping => [ %w(cents cents), %w(currency currency) ]
-# 
-#     private        
-#       validate :cents_not_zero
-#     
-#       def cents_not_zero
-#         errors.add("cents", "cannot be zero or less") unless cents > 0
-#       end
-#     
-#       validates_presence_of :sku, :currency
-#       validates_uniqueness_of :sku        
-#   end
-#   
 class Money
   include Comparable
 
