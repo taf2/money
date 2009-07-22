@@ -23,6 +23,13 @@ class OtherMoneyExample < ActiveRecord::Base
   money :precise_amount, :cents => "credit_amount_in_cents", :precision => 3
 end
 
+class YetAnotherMoneyExample < ActiveRecord::Base
+  set_table_name "money_examples"
+  
+  money :amount, :allow_nil => false
+  money :precise_amount, :allow_nil => false, :precision => 3
+end
+
 describe Money, "using the money declaration in an ActiveRecord model" do
   it "should allow dynamic finders to work the same as composed_of" do
     record = MoneyExample.create!(:debit_amount => 100.to_money)
@@ -75,6 +82,19 @@ describe Money, "using the money declaration in an ActiveRecord model" do
       ome = OtherMoneyExample.new(:credit_amount_in_cents => 535)
       ome.precise_amount.should == Money.new(535, 'USD', 3)
     end
-
+  end
+  
+  describe "defaulting to $0" do
+    context "when the amount is nil" do
+      it "should default to $0" do
+        YetAnotherMoneyExample.new(:amount => nil).amount.should == Money.new(0, 'USD', 2)
+      end
+    end
+    
+    context "when the precision is configured" do
+      it "should default to $0 with the right precision" do
+        YetAnotherMoneyExample.new(:precise_amount => nil).amount.should == Money.new(0, 'USD', 3)
+      end
+    end
   end
 end
