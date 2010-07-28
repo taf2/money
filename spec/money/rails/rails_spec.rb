@@ -55,8 +55,8 @@ describe Money, "using the money declaration in an ActiveRecord model" do
     end
     
     it "should allow existing amounts to be set to nil with a blank value" do
-      me = MoneyExample.new(:debit_amount => 500.to_money)
-      me.update_attribute :debit_amount, ''
+      me = MoneyExample.create(:debit_amount => 500.to_money)
+      me.debit_amount = ''
       me.debit_amount.should be_nil
     end
   end
