@@ -41,7 +41,7 @@ class String
     if !precision
       scan(/\.(\d+)/); m = $1
       precision =  m.size if m and m.respond_to?(:size)
-      precision = 2 if precision < 2
+      precision = 2 if precision.nil? or precision < 2
     end
 
     # Get the cents amount
