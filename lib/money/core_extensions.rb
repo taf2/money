@@ -39,7 +39,8 @@ class String
     currency = matches[0] ? matches[0][0] : Money.default_currency
     
     if !precision
-      precision = scan(/\.(\d+)/).to_s.length
+      scan(/\.(\d+)/); m = $1
+      precision =  m.size if m and m.respond_to?(:size)
       precision = 2 if precision < 2
     end
 
