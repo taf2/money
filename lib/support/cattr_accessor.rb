@@ -1,5 +1,9 @@
 # Extends the class object with class and instance accessors for class attributes, 
 # just like the native attr* accessors for instance attributes.
+unless Class.respond_to?(:cattr_accessor)
+begin
+  require 'active_support/core_ext/class/attribute_accessors'
+rescue LoadError 
 class Class # :nodoc:
   def cattr_reader(*syms)
     syms.each do |sym|
@@ -54,4 +58,6 @@ class Class # :nodoc:
     cattr_reader(*syms)
     cattr_writer(*syms)
   end unless instance_methods.include?('cattr_accessor')
+end
+end
 end
