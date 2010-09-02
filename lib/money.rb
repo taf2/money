@@ -88,7 +88,7 @@ class Money
 
 
   # Format the price according to several rules
-  # Currently supported are :with_currency, :no_cents and :html
+  # Currently supported are :with_currency, :no_cents, :html, :commas, :no_money_sign
   #
   # with_currency: 
   #
@@ -108,12 +108,45 @@ class Money
   # html:
   #
   #  Money.ca_dollar(570).format(:html, :with_currency) =>  "$5.70 <span class=\"currency\">CAD</span>"
+  #
+  # commas:
+  #
+  #  Money.us_dollar(100085).format(:commas) => "$1,000.85"
+  #
+  # no_money_sign:
+  #
+  #  Money.us_dollar(100085).format(:no_money_sign) => "1000.85"
+  #
   def format(*rules)
     return self.class.zero if zero? && self.class.zero
     
     rules = rules.flatten
 
-    formatted = "$" + to_s(rules.include?(:no_cents) ? 0 : 2)
+    amount = to_s(rules.include?(:no_cents) ? 0 : 2)
+
+    if rules.include?(:commas)
+      first, last = amount.split('.')
+      digits = first.split('')
+      if digits.size > 3
+        counter = 0
+        digits_with_commas = []
+        digits.reverse.each do|digit|
+          counter += 1
+          if counter == 4
+            digits_with_commas << ','
+            counter = 1
+          end
+          digits_with_commas << digit
+        end
+        amount = digits_with_commas.reverse.join + '.' + last
+      end
+    end
+
+    if rules.include?(:no_money_sign)
+      formatted = amount
+    else
+      formatted = "$" + amount
+    end
 
     if rules.include?(:with_currency)
       formatted << " "
@@ -121,6 +154,7 @@ class Money
       formatted << currency
       formatted << '</span>' if rules.include?(:html)
     end
+
     formatted
   end
 
