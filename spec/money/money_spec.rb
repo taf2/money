@@ -164,6 +164,16 @@ describe Money do
       Money.zero = nil # reset back to default
     end
 
+    it "should inject commas into amounts over 1000" do
+      Money.us_dollar(100085).format(:commas).should == "$1,000.85"
+      Money.us_dollar(100000085).format(:commas).should == "$1,000,000.85"
+      Money.us_dollar(100050000085).format(:commas).should == "$1,000,500,000.85"
+    end
+
+    it "should allow formatting without a $ sign" do
+      Money.us_dollar(100085).format(:no_money_sign).should == "1000.85"
+    end
+
   end
   
   describe "to_precision" do
