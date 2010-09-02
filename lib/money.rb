@@ -127,6 +127,7 @@ class Money
     if rules.include?(:commas)
       first, last = amount.split('.')
       digits = first.split('')
+      minus = digits.shift if digits.first == '-'
       if digits.size > 3
         counter = 0
         digits_with_commas = []
@@ -139,6 +140,7 @@ class Money
           digits_with_commas << digit
         end
         amount = digits_with_commas.reverse.join + '.' + last
+        amount = "-" + amount if minus
       end
     end
 

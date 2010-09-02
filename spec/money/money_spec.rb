@@ -168,6 +168,7 @@ describe Money do
       Money.us_dollar(100085).format(:commas).should == "$1,000.85"
       Money.us_dollar(100000085).format(:commas).should == "$1,000,000.85"
       Money.us_dollar(100050000085).format(:commas).should == "$1,000,500,000.85"
+      Money.us_dollar(-30000).format(:commas).should == "$-300.00"
     end
 
     it "should allow formatting without a $ sign" do
