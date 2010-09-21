@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'money'
-  s.version = '1.7.6'
+  s.version = '1.7.7'
   s.summary = "Class aiding in the handling of Money."
   s.description = 'Class aiding in the handling of Money and Currencies. It supports easy pluggable bank objects for customized exchange strategies. Can be used as composite in ActiveRecord tables.'
   s.has_rdoc = true
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   )
 
   s.require_path = 'lib'
-  s.authors = ["Brandon Keepers", "Tobias Luetke"]
+  s.authors = ["Todd Fisher", "Jonathan Phillips", "Brandon Keepers", "Tobias Luetke"]
   s.email = "brandon@opensoul.org"
-  s.homepage = "http://github.com/collectiveidea/money"
+  s.homepage = "http://github.com/taf2/money"
 end
