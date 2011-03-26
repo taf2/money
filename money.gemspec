@@ -13,11 +13,10 @@ Gem::Specification.new do |s|
     lib/money/bank/no_exchange_bank.rb
     lib/money/bank/variable_exchange_bank.rb
     lib/money/rails.rb
-    lib/support/cattr_accessor.rb
   )
 
   s.require_path = 'lib'
-  s.authors = ["Brandon Keepers", "Tobias Luetke"]
-  s.email = "brandon@opensoul.org"
+  s.authors = ["Daniel Morrison", "Brandon Keepers", "Tobias Luetke"]
+  s.email = "info@collectiveidea.com"
   s.homepage = "http://github.com/collectiveidea/money"
 end
