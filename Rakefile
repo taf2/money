@@ -1,9 +1,11 @@
 require 'rubygems'
 require 'rake'
-require 'spec/rake/spectask'
-require 'rake/rdoctask'
-require 'rake/gempackagetask'
-require 'rake/contrib/rubyforgepublisher'
+#require 'spec/rake/spectask'
+#require 'rake/rdoctask'
+#require 'rake/testtask'
+require 'rdoc/task'
+#require 'rake/gempackagetask'
+#require 'rake/contrib/rubyforgepublisher'
 require 'fileutils'
 
 spec = eval(File.read("#{File.dirname(__FILE__)}/money.gemspec"))
@@ -39,7 +41,12 @@ task :default => [ :spec ]
 desc "Delete tar.gz / zip / rdoc"
 task :cleanup => [ :rm_packages, :clobber_rdoc ]
 
-Spec::Rake::SpecTask.new
+#Spec::Rake::SpecTask.new
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError
+end
 
 task :install => [:package] do
   `gem install pkg/#{PKG_FILE_NAME}.gem`
@@ -89,11 +96,11 @@ task :publish => [:rdoc, :package] do
 end
 
 
-Rake::GemPackageTask.new(spec) do |p|
-  p.gem_spec = spec
-  p.need_tar = true
-  p.need_zip = true
-end
+#Rake::GemPackageTask.new(spec) do |p|
+#  p.gem_spec = spec
+#  p.need_tar = true
+#  p.need_zip = true
+#end
 
 # --- Ruby forge release manager by florian gross -------------------------------------------------
 

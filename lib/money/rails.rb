@@ -31,7 +31,8 @@ module ActiveRecord #:nodoc:
           define_method "#{name}_with_cleanup=" do |amount|
             send "#{name}_without_cleanup=", amount.blank? ? nil : amount.to_money(options[:precision])
           end
-          alias_method_chain "#{name}=", :cleanup
+          alias_method :"#{name}_without_cleanup=", :"#{name}="
+          alias_method :"#{name}=", :"#{name}_with_cleanup="
         end
       end
     end
